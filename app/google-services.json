@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "384559948518",
+    "firebase_url": "https://offlinepay-1bfa8.firebaseio.com",
+    "project_id": "offlinepay-1bfa8",
+    "storage_bucket": "offlinepay-1bfa8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384559948518:android:018e697f8d8feef7a81127",
+        "android_client_info": {
+          "package_name": "lohith.com.offlinepay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384559948518-p4g222mfn1cdcasvbu7upaeg9580phq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lohith.com.offlinepay",
+            "certificate_hash": "0893054f6d844194cfe4f611f787b5aef5a37abe"
+          }
+        },
+        {
+          "client_id": "384559948518-huc4dijs7cl2rfcbbaukicuplp21pcfl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDETORX0N6orvtxGP8wKNHVmmwgmLxeEZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384559948518-huc4dijs7cl2rfcbbaukicuplp21pcfl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
