@@ -7,32 +7,36 @@ admin.initializeApp();
 const db = admin.database();
 
 
-exports.generateE = functions.database.ref('/Registration/{keyId}/').onWrite((change,context) => {
+exports.transactD = functions.database.ref('/Transactions/{keyId}/').onWrite((change,context) => {
+
+      const cipher = change.after.val();
+      console.log('Cipher',context.params.keyId, cipher);
     
       // Grab the current value of what was written to the Realtime Database.
-      
-      // Generate RSA keys
-        const keys = RSA.generate(250);
 
-        //console.log('Keys');
-        console.log('n:', keys.n.toString());
-        console.log('d:', keys.d.toString());
-        console.log('e:', keys.e.toString());
+       var ref = db.ref("/Registration/"+context.params.keyId.toString()+"/d");
+       ref.on("value",function(snapshot){
+       var d = snapshot.val();
+       console.log("d val",d.toString());
+       },function(error){
+       console.log(error);
+       });
         
-
-
-
-       var ref = db.ref("/Registration/"+context.params.keyId.toString());
-       ref.update({
-          d:keys.d.toString()
+       
+       var ref = db.ref("/Registration/"+context.params.keyId.toString()+"/n");
+       ref.on("value",function(snapshot){
+       var n = snapshot.val();
+       console.log("n val",n.toString());
+       },function(error){
+       console.log(error);
        });
-        ref.update({
-          n:keys.n.toString()
-       });
-        ref.update({
-          e:keys.e.toString()
-       });
-             
+       
+       const decrypted_message = RSA.decrypt(cipher, d, n);
+       const decoded_message = RSA.decode(decrypted_message);
+       
+       
+       
+       
     });
     
 
