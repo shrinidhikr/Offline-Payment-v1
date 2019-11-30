@@ -14,7 +14,7 @@ exports.transactD = functions.database.ref('/Transactions/{keyId}/').onWrite((ch
     
       // Grab the current value of what was written to the Realtime Database.
 
-       var ref = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/d");
+       var ref = db.ref("/Registration/"+context.params.keyId.toString()+"/d");
        ref.on("value",function(snapshot){
        var d = snapshot.val();
        console.log("d val",d.toString());
@@ -63,16 +63,19 @@ exports.transactD = functions.database.ref('/Transactions/{keyId}/').onWrite((ch
        console.log(error);
        });
       
-       var ref = db.ref("/Balance");
-       ref.update({
-          sender_acc: parseInt(sender_balance) - parseInt(transaction_amount);
-       });
-      
-       var ref = db.ref("/Balance");
-       ref.update({
-          receiver_acc: parseInt(receiver_balance) + parseInt(transaction_amount);
-       });
-       
+       if (parseInt(sender_balance) - parseInt(transaction_amount))
+       {
+           var ref = db.ref("/Balance");
+           ref.update({
+              sender_acc: parseInt(sender_balance) - parseInt(transaction_amount);
+           });
+          
+           var ref = db.ref("/Balance");
+           ref.update({
+              receiver_acc: parseInt(receiver_balance) + parseInt(transaction_amount);
+           });
+       }
+            
        
     });
      
