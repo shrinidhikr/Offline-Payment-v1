@@ -7,7 +7,7 @@ admin.initializeApp();
 const db = admin.database();
 
 
-exports.generateE = functions.database.ref('/Registration/{keyId}/').onWrite((change,context) => {
+exports.generateE = functions.database.ref('/Registration/{keyId}').onWrite((change,context) => {
     
       // Grab the current value of what was written to the Realtime Database.
       
@@ -22,7 +22,7 @@ exports.generateE = functions.database.ref('/Registration/{keyId}/').onWrite((ch
 
 
 
-       var ref = db.ref("/Registration/"+context.params.keyId.toString());
+       var ref = db.ref("/en-de-keys/"+context.params.keyId.toString());
        ref.update({
           d:keys.d.toString()
        });
@@ -34,3 +34,5 @@ exports.generateE = functions.database.ref('/Registration/{keyId}/').onWrite((ch
        });
              
     });
+    
+
