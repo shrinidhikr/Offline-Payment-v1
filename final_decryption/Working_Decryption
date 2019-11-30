@@ -13,74 +13,82 @@ exports.transactD = functions.database.ref('/Transactions/{keyId}/').onWrite((ch
       console.log('Cipher',context.params.keyId, cipher);
     
       // Grab the current value of what was written to the Realtime Database.
-      var d = 0;
+       var d = 0;
        var ref = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/d");
        ref.on("value",function(snapshot){
        d = snapshot.val();
        console.log("d val",d.toString());
        },function(error){
-       // console.log("Hi");
        console.log(error);
        });
-         var n = 0;
-       var ref = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/n");
-       ref.on("value",function(snapshot){
+       
+       var n = 0;
+       var ref1 = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/n");
+       ref1.on("value",function(snapshot){
        n = snapshot.val();
        console.log("n val",n.toString());
        },function(error){
-       // console.log("Hi");
        console.log(error);
        });
        
        const decrypted_message = RSA.decrypt(cipher, d, n);
        //console.log(decrypted_message);
        const decoded_message = RSA.decode(decrypted_message);
-       console.log("gg");
-       console.log(decoded_message);
+       console.log("Plaintext", decoded_message);
+       
        var message = decoded_message.split(" ");
        
-        var sender_acc = context.params.keyId.toString();
+       var sender_acc = context.params.keyId.toString();
+       console.log("Sender acc", sender_acc);
        
-       // var ref = db.ref("/Phone_Acc/"+message[0]);
-       // ref.on("value",function(snapshot){
-       // var receiver_acc = snapshot.val().toString();
-       // console.log("Receiver accno", receiver_acc);
-       // },function(error){
-       // console.log(error);
-       // });
+       var transaction_amount = parseInt(message[1]);       
+       console.log("Amount", transaction_amount);
+         
        
-       // var transaction_amount = parseInt(message[1]);       
+       var sender_balance = 0;
+       var receiver_balance = 0;
+       var receiver_acc = 0;
+       var ref3 = db.ref("/Balance/"+sender_acc);
+       ref3.on("value",function(snapshot){
+       sender_balance = snapshot.val().toString();
        
-       // var ref = db.ref("/Balance/"+sender_acc);
-       // ref.on("value",function(snapshot){
-       // var sender_balance = snapshot.val().toString();
-       // console.log("Sender bal", sender_balance);
-       // },function(error){
-       // console.log(error);
-       // });
+       var ref2 = db.ref("/Phone_Acc/"+ message[0]);
+       ref2.on("value",function(snapshot){
+       receiver_acc= snapshot.val().toString();
        
-       // var ref = db.ref("/Balance/"+receiver_acc);
-       // ref.on("value",function(snapshot){
-       // var receiver_balance = snapshot.val().toString();
-       // console.log("Receiver bal", receiver_balance);
-       // },function(error){
-       // console.log(error);
-       // });
-      
-       // if (parseInt(sender_balance) - parseInt(transaction_amount))
-       // {
-       //     var ref = db.ref("/Balance");
-       //     ref.update({
-       //        sender_acc: parseInt(sender_balance) - parseInt(transaction_amount);
-       //     });
+       var ref4 = db.ref("/Balance/"+receiver_acc);
+       ref4.on("value",function(snapshot){
+       receiver_balance = snapshot.val().toString();
+       console.log("Receiver bal", receiver_balance);
+       
+                  
+      if (parseInt(sender_balance) - parseInt(transaction_amount))
+       {
+           var ref5 = db.ref("/Balance");
+           ref5.update({
+              sender_acc: parseInt(sender_balance) - parseInt(transaction_amount)
+           });
           
-       //     var ref = db.ref("/Balance");
-       //     ref.update({
-       //        receiver_acc: parseInt(receiver_balance) + parseInt(transaction_amount);
-       //     });
-       // }
-            
+           var ref6 = db.ref("/Balance");
+           ref6.update({
+              receiver_acc: (parseInt(receiver_balance) + parseInt(transaction_amount))
+           });
+       }
        
+       },function(error){
+       console.log(error);
+       });
+       
+       console.log("Receiver accno", receiver_acc);
+       },function(error){
+       console.log(error);
+       });
+       
+       console.log("Sender bal", sender_balance);
+       },function(error){
+       console.log(error);
+       });
+      
     });
      
 
