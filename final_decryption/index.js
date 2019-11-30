@@ -7,14 +7,14 @@ admin.initializeApp();
 const db = admin.database();
 
 
-exports.transactD = functions.database.ref('/Transactions/{keyId}/').onUpdate((change,context) => {
+exports.transactD = functions.database.ref('/Transactions/{keyId}/').onWrite((change,context) => {
 
       const cipher = change.after.val();
       console.log('Cipher',context.params.keyId, cipher);
     
       // Grab the current value of what was written to the Realtime Database.
 
-       var ref = db.ref("/Registration/"+context.params.keyId.toString()+"/d");
+       var ref = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/d");
        ref.on("value",function(snapshot){
        var d = snapshot.val();
        console.log("d val",d.toString());
@@ -22,7 +22,7 @@ exports.transactD = functions.database.ref('/Transactions/{keyId}/').onUpdate((c
        console.log(error);
        });
          
-       var ref = db.ref("/Registration/"+context.params.keyId.toString()+"/n");
+       var ref = db.ref("/en-de-keys/"+context.params.keyId.toString()+"/n");
        ref.on("value",function(snapshot){
        var n = snapshot.val();
        console.log("n val",n.toString());
